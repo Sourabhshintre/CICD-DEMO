@@ -1,48 +1,17 @@
-# version: 0.0
-# os: linux
-# files:
-#   - source: /index.html
-#     destination: /var/www/html/
-# hooks:
-#   BeforeInstall:
-#     - location: scripts/install_dependencies
-#       timeout: 300
-#       runas: root
-#     - location: scripts/start_server
-#       timeout: 300
-#       runas: root
-#   ApplicationStop:
-#     - location: scripts/stop_server
-#       timeout: 300
-#       runas: root
-
 version: 0.0
 os: linux
 files:
   - source: /index.html
-    destination: /var/www/html/ # Assuming Nginx serves from here
+    destination: /var/www/html/
 hooks:
-  ApplicationStop:
-    - location: scripts/stop_server
-      timeout: 60 # Shorter timeout, just to stop the server
-      runas: root
   BeforeInstall:
-    # Use this to install Nginx, other system dependencies
     - location: scripts/install_dependencies
       timeout: 300
       runas: root
-  AfterInstall:
-    # Use this to configure Nginx after the new files are in place
-    - location: scripts/configure_nginx # New hook for configuration
-      timeout: 180
-      runas: root
-  ApplicationStart:
-    # Start the Nginx web server after everything is installed and configured
     - location: scripts/start_server
-      timeout: 180
+      timeout: 300
       runas: root
-  # Optional: Add a ValidateService hook for health checks
-  # ValidateService:
-  #   - location: scripts/validate_service.sh
-  #     timeout: 180
-  #     runas: root
+  ApplicationStop:
+    - location: scripts/stop_server
+      timeout: 300
+      runas: root
